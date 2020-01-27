@@ -63,6 +63,7 @@ export default function App() {
     const cancelNoteHandler = () => {
         setIsAddMode(false);
         setIsViewMode(false);
+        setNoteDecrypted(false);
     }
 
     const removeNoteHandler = noteId => {
@@ -70,6 +71,7 @@ export default function App() {
         setNote(currentNotes => {
             return currentNotes.filter((note) => note.id !== noteId);
         })
+        ToastAndroid.show('Note removed!', ToastAndroid.SHORT);
     }
 
     const encryptAES = note => {
