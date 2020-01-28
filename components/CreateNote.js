@@ -30,7 +30,7 @@ const CreateNote = props => {
     return (
         <Modal visible={props.visible} animationType="fade">
             <View style={styles.header}>
-                <Text style={styles.headerTitle}> Latitude: {props.location.lat} / Longitude:{props.location.lon} </Text>
+                <Text style={styles.headerTitle}> Latitude: {props.location.lat}      Longitude: {props.location.lon} </Text>
             </View>
             <View style={styles.inputContainer}>
                 <TextInput placeholder="Title of the note"
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         margin: 10,
         padding: 10,
-        backgroundColor: 'white',
+        backgroundColor: '#B6F0DA',
         borderColor: 'black',
         borderWidth: 1,
         width: '50%',
@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         margin: 10,
         padding: 10,
-        backgroundColor: 'white',
+        backgroundColor: '#B6F0DA',
         height: '70%',
         width: '90%',
         borderColor: 'black',

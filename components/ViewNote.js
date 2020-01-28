@@ -1,15 +1,19 @@
 import React, { useState } from 'react';
-import { View, Button, TextInput, StyleSheet, Modal } from 'react-native'
+import { View, Button, Text, StyleSheet, Modal, Clipboard, ToastAndroid } from 'react-native'
 
 const ViewNote = props => {
+    const copyToClipboard = () => {
+        Clipboard.setString(props.note.note);
+    }
+
     return (
         <Modal visible={props.visible} animationType="fade">
             <View style={styles.header}>
                 <Text style={styles.headerTitle}> Latitude: {props.location.lat} / Longitude:{props.location.lon} </Text>
             </View>
             <View style={styles.inputContainer}>
-                <TextInput editble={false} style={styles.title}>{props.note.title}</Text>
-                <TextInput editble={false} style={styles.inputNote} multiline numberOfLines={8}>{props.note.note}</Text>
+                <Text editble={false} style={styles.title}>{props.note.title}</Text>
+                <Text onLongPress={copyToClipboard} editble={false} style={styles.inputNote} multiline numberOfLines={8}>{props.note.note}</Text>
                 <View style={styles.buttonContainer}>
                     <View style={styles.button}>
                         <Button title="GO BACK 👈" color='#FB7373' onPress={props.onCancel} />
@@ -59,7 +63,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         margin: 10,
         padding: 10,
-        backgroundColor: 'white',
+        backgroundColor: '#B6F0DA',
         borderColor: 'black',
         borderWidth: 1,
         width: '50%',
@@ -70,7 +74,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         margin: 10,
         padding: 10,
-        backgroundColor: 'white',
+        backgroundColor: '#B6F0DA',
         height: '70%',
         width: '90%',
         borderColor: 'black',
