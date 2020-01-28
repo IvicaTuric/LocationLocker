@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, Button, Text, StyleSheet, Modal, Clipboard, ToastAndroid } from 'react-native'
+import React from 'react';
+import { View, Button, Text, StyleSheet, Modal, Clipboard } from 'react-native'
 
 const ViewNote = props => {
     const copyToClipboard = () => {

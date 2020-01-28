@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Button, Text, StyleSheet, FlatList, ToastAndroid, AsyncStorage, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, FlatList, ToastAndroid, AsyncStorage, TouchableOpacity } from 'react-native'
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import CryptoJS from "react-native-crypto-js";
@@ -8,7 +8,8 @@ import Note from './components/Note';
 import CreateNote from "./components/CreateNote";
 import ViewNote from "./components/ViewNote";
 
-let n=0;
+let n = 0;
+let smileyList = ["😊", "😁", "😎", "😜", "👽", "😆", "🤯", "🤪", "🥳", "😃", "🤡", "🙉"];
 
 export default function App() {
     const [notes, setNote] = useState([]);
@@ -19,17 +20,12 @@ export default function App() {
     const [noteDecrypted, setNoteDecrypted] = useState(false);
     const [appStarted, setAppStarted] = useState(true);
 
+    // Only needs to run once, when app starts
     if (appStarted) {
-        console.log("ggggggg");
         loadNotes();
     }
 
-    let smileyList = ["😊", "😁", "😎", "😜", "😃", "😆", "🤯", "🤪", "🤡", "🥳", "👽", "🙉"];
-
-    const getRandomSmiley = () => {
-        return smileyList[Math.floor(Math.random() * 11)] + "  ";
-    }
-
+    // Ask for permission and get location when creating or viewing note
     const _getLocationAsync = async () => {
         let { status } = await Permissions.askAsync(Permissions.LOCATION);
         if (status !== 'granted') {
@@ -42,24 +38,26 @@ export default function App() {
         setLocation({ lon: loc.coords.longitude.toFixed(3).toString(), lat: loc.coords.latitude.toFixed(3).toString() });
     };
 
+    // Add encrypted note to list and to phone storage
+    // Use random num for ID
     const addNoteHandler = async (noteProp) => {
         let cryptedNote = encryptAES(noteProp.enteredNote);
         let rndId = Math.random().toString();
-        let newTitle=smileyList[n++] + "  " + noteProp.enteredTitle;
+        let newTitle = smileyList[n++] + "  " + noteProp.enteredTitle;
         let newNote = { id: rndId, title: newTitle, note: cryptedNote }
         setNote(currentNotes => [
             ...currentNotes, newNote
         ]);
-
+        if (n > 11) n = 0;
         try {
             await AsyncStorage.setItem(rndId, JSON.stringify(newNote));
         } catch (error) {
             console.log(error);
         }
-
         setIsAddMode(false);
     }
 
+    // Remove selected note from list and phone storage
     const removeNoteHandler = noteId => {
         setNote(currentNotes => {
             return currentNotes.filter((note) => note.id !== noteId);
@@ -85,14 +83,16 @@ export default function App() {
         setNoteDecrypted(false);
     }
 
+    // Use location as key for encrypting the note
     const encryptAES = note => {
         let key = location.lat + location.lon;
         ToastAndroid.show('Note encrypted!', ToastAndroid.SHORT);
         return CryptoJS.AES.encrypt(note, key).toString();
     }
 
+    // Check if note is decrypted or key(location) is wrong
+    // AES returns empty on incorrect key
     const decryptAES = note => {
-        // Decrypt
         if (noteDecrypted) {
             ToastAndroid.show('Note alredy decrypted!', ToastAndroid.SHORT);
             return;
@@ -104,11 +104,12 @@ export default function App() {
             ToastAndroid.show('Location incorrect!', ToastAndroid.SHORT);
             return;
         }
-        setCurrentNote({ id: "aaa", title: note.title, note: originalText });
+        setCurrentNote({ id: currentNote.id, title: note.title, note: originalText });
         ToastAndroid.show('Note decrypted!', ToastAndroid.SHORT);
         setNoteDecrypted(true);
     }
 
+    // Load all keys and go through them to load notes to list
     function loadNotes() {
         setAppStarted(false);
         AsyncStorage.getAllKeys().then(keys =>
@@ -166,6 +167,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center'
     },
+    // I really wanted round button :D
     button: {
         backgroundColor: '#4392F1',
         alignItems: 'center',

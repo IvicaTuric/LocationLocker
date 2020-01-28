@@ -20,6 +20,7 @@ const CreateNote = props => {
         setEnteretTitle('');
     }
 
+    // Need to set title and note to empty or it would load again on new create
     const cancelHandler = () => {
         setEnteretNote('');
         setEnteretTitle('');
@@ -49,7 +50,6 @@ const CreateNote = props => {
                         <Button title="ENCRYPT 🔐" color='#00B26E' onPress={addNoteHandler} />
                     </View>
                 </View>
-
             </View>
         </Modal>
     )
