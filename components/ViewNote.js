@@ -1,5 +1,30 @@
 import React, { useState } from 'react';
-import { View, Button, Text, StyleSheet, Modal } from 'react-native'
+import { View, Button, TextInput, StyleSheet, Modal } from 'react-native'
+
+const ViewNote = props => {
+    return (
+        <Modal visible={props.visible} animationType="fade">
+            <View style={styles.header}>
+                <Text style={styles.headerTitle}> Latitude: {props.location.lat} / Longitude:{props.location.lon} </Text>
+            </View>
+            <View style={styles.inputContainer}>
+                <TextInput editble={false} style={styles.title}>{props.note.title}</Text>
+                <TextInput editble={false} style={styles.inputNote} multiline numberOfLines={8}>{props.note.note}</Text>
+                <View style={styles.buttonContainer}>
+                    <View style={styles.button}>
+                        <Button title="GO BACK 👈" color='#FB7373' onPress={props.onCancel} />
+                    </View>
+                    <View style={styles.button}>
+                        <Button title="DECRYPT 🔓" color='#00B26E' onPress={props.onDecrypt.bind(this, props.note)} />
+                    </View>
+                </View>
+
+            </View>
+        </Modal>
+    )
+}
+
+export default ViewNote;
 
 const styles = StyleSheet.create({
     inputContainer: {
@@ -52,51 +77,4 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         textAlignVertical: 'top'
     }
-
-
 })
-
-const ViewNote = props => {
-
-    const [enteredTitle, setEnteretTitle] = useState('');
-    const [enteredNote, setEnteretNote] = useState('');
-
-    const noteInput = enteredNote => {
-        setEnteretNote(enteredNote);
-    }
-
-    const titleInput = enteredTitle => {
-        setEnteretTitle(enteredTitle);
-    }
-
-    const addNoteHandler = () => {
-        props.onAddNote({ enteredNote, enteredTitle });
-        setEnteretNote('');
-        setEnteretTitle('');
-    }
-
-
-
-    return (
-        <Modal visible={props.visible} animationType="fade">
-            <View style={styles.header}>
-                <Text style={styles.headerTitle}> Latitude: {props.location.lat} / Longitude:{props.location.lon} </Text>
-            </View>
-            <View style={styles.inputContainer}>
-                <Text style={styles.title}>{props.note.title}</Text>
-                <Text style={styles.inputNote} multiline numberOfLines={8}>{props.note.note}</Text>
-                <View style={styles.buttonContainer}>
-                    <View style={styles.button}>
-                        <Button title="GO BACK 👈" color='#FB7373' onPress={props.onCancel} />
-                    </View>
-                    <View style={styles.button}>
-                        <Button title="DECRYPT 🔓" color='#00B26E' onPress={props.onDecrypt.bind(this, props.note)} />
-                    </View>
-                </View>
-
-            </View>
-        </Modal>
-    )
-}
-
-export default ViewNote;

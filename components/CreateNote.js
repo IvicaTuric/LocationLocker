@@ -1,5 +1,61 @@
 import React, { useState } from 'react';
-import { View, Button, Text, StyleSheet, Modal, TextInput } from 'react-native'
+import { View, Button, Text, StyleSheet, Modal, TextInput, ToastAndroid } from 'react-native'
+
+const CreateNote = props => {
+
+    const [enteredTitle, setEnteretTitle] = useState('');
+    const [enteredNote, setEnteretNote] = useState('');
+
+    const noteInput = enteredNote => {
+        setEnteretNote(enteredNote);
+    }
+
+    const titleInput = enteredTitle => {
+        setEnteretTitle(enteredTitle);
+    }
+
+    const addNoteHandler = () => {
+        props.onAddNote({ enteredNote, enteredTitle });
+        setEnteretNote('');
+        setEnteretTitle('');
+    }
+
+    const cancelHandler = () => {
+        setEnteretNote('');
+        setEnteretTitle('');
+        props.onCancel();
+        ToastAndroid.show('Note discarded!', ToastAndroid.SHORT);
+    }
+
+    return (
+        <Modal visible={props.visible} animationType="fade">
+            <View style={styles.header}>
+                <Text style={styles.headerTitle}> Latitude: {props.location.lat} / Longitude:{props.location.lon} </Text>
+            </View>
+            <View style={styles.inputContainer}>
+                <TextInput placeholder="Title of the note"
+                    style={styles.inputTitle}
+                    onChangeText={titleInput}
+                    value={enteredTitle} />
+                <TextInput multiline numberOfLines={8} placeholder="Start writing your note"
+                    style={styles.inputNote}
+                    onChangeText={noteInput}
+                    value={enteredNote} />
+                <View style={styles.buttonContainer}>
+                    <View style={styles.button}>
+                        <Button title="CANCEL ❌" color='#FB7373' onPress={cancelHandler} />
+                    </View>
+                    <View style={styles.button}>
+                        <Button title="ENCRYPT 🔐" color='#00B26E' onPress={addNoteHandler} />
+                    </View>
+                </View>
+
+            </View>
+        </Modal>
+    )
+}
+
+export default CreateNote;
 
 const styles = StyleSheet.create({
     inputContainer: {
@@ -51,57 +107,4 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         textAlignVertical: 'top'
     }
-
-
 })
-
-const CreateNote = props => {
-
-    const [enteredTitle, setEnteretTitle] = useState('');
-    const [enteredNote, setEnteretNote] = useState('');
-
-    const noteInput = enteredNote => {
-        setEnteretNote(enteredNote);
-    }
-
-    const titleInput = enteredTitle => {
-        setEnteretTitle(enteredTitle);
-    }
-
-    const addNoteHandler = () => {
-        props.onAddNote({ enteredNote, enteredTitle });
-        setEnteretNote('');
-        setEnteretTitle('');
-    }
-
-
-
-    return (
-        <Modal visible={props.visible} animationType="fade">
-            <View style={styles.header}>
-                <Text style={styles.headerTitle}> Latitude: {props.location.lat} / Longitude:{props.location.lon} </Text>
-            </View>
-            <View style={styles.inputContainer}>
-                <TextInput placeholder="Title of the note"
-                    style={styles.inputTitle}
-                    onChangeText={titleInput}
-                    value={enteredTitle} />
-                <TextInput multiline numberOfLines={8} placeholder="Start writing your note"
-                    style={styles.inputNote}
-                    onChangeText={noteInput}
-                    value={enteredNote} />
-                <View style={styles.buttonContainer}>
-                    <View style={styles.button}>
-                        <Button title="CANCEL ❌" color='#FB7373' onPress={props.onCancel} />
-                    </View>
-                    <View style={styles.button}>
-                        <Button title="ENCRYPT 🔐" color='#00B26E' onPress={addNoteHandler} />
-                    </View>
-                </View>
-
-            </View>
-        </Modal>
-    )
-}
-
-export default CreateNote;

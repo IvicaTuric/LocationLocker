@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Button, Text, StyleSheet, FlatList, ToastAndroid} from 'react-native'
+import { View, Button, Text, StyleSheet, FlatList, ToastAndroid } from 'react-native'
 import Constants from 'expo-constants';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
@@ -17,14 +17,10 @@ export default function App() {
     const [location, setLocation] = useState({ lon: "", lat: "" });
     const [noteDecrypted, setNoteDecrypted] = useState(false);
 
-    const componentWillMount = () => {
-        if (Platform.OS === 'android' && !Constants.isDevice) {
-            this.setState({
-                errorMessage: 'Oops, this will not work on Sketch in an Android emulator. Try it on your device!',
-            });
-        } else {
-            this._getLocationAsync();
-        }
+    let smileyList = ["😊", "😁", "😎", "😜", "😃", "😆", "🤯", "🤪", "🤡", "🥳", "👽", "🙉"];
+
+    const getRandomSmiley = () => {
+        return smileyList[Math.floor(Math.random() * 12)] + " ";
     }
 
     const _getLocationAsync = async () => {
@@ -34,7 +30,6 @@ export default function App() {
                 errorMessage: 'Permission to access location was denied',
             });
         }
-        Location.Accuracy.Lowest
         let loc = await Location.getCurrentPositionAsync({});
         // At 45° lat accuracy at 3rd decimal is around 70m
         setLocation({ lon: loc.coords.longitude.toFixed(3).toString(), lat: loc.coords.latitude.toFixed(3).toString() });
@@ -44,7 +39,7 @@ export default function App() {
     const addNoteHandler = noteProp => {
         let cryptedNote = encryptAES(noteProp.enteredNote);
         setNote(currentNotes => [
-            ...currentNotes, { id: Math.random().toString(), title: noteProp.enteredTitle, note: cryptedNote }
+            ...currentNotes, { id: Math.random().toString(), title: getRandomSmiley() + noteProp.enteredTitle, note: cryptedNote }
         ]);
         setIsAddMode(false);
     }
@@ -82,7 +77,7 @@ export default function App() {
 
     const decryptAES = note => {
         // Decrypt
-        if(noteDecrypted){
+        if (noteDecrypted) {
             ToastAndroid.show('Note alredy decrypted!', ToastAndroid.SHORT);
             return;
         }
