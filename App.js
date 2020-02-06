@@ -129,7 +129,7 @@ export default function App() {
                 <Text style={styles.headerTitle}> Location 🔐 Locker </Text>
             </View>
             <TouchableOpacity style={styles.button} onPress={() => openAddMode()}>
-                <Text>➕</Text>
+                <Text style={styles.headerButton}>+</Text>
             </TouchableOpacity>
             <FlatList
                 keyExtractor={(item, index) => item.id.toString()}
@@ -148,28 +148,48 @@ export default function App() {
     )
 }
 
+const colors ={
+  'blue':'#007bff',
+  'indigo':'#6610f2',
+  'purple':'#6f42c1',
+  'pink':'#e83e8c',
+  'red':'#dc3545',
+  'orange':'#fd7e14',
+  'yellow':'#ffc107',
+  'green':'#28a745',
+  'teal':'#20c997',
+  'cyan':'#17a2b8',
+  'white':'#fff',
+  'gray':'#6c757d',
+  'grayDark':'#343a40',
+  'black': '#000',
+  'primary':'#007bff',
+  'secondary':'#6c757d',
+  'success':'#28a745',
+  'info':'#17a2b8',
+  'warning':'#ffc107',
+  'danger':'#dc3545',
+  'light':'#f8f9fa',
+  'dark':'#343a40'
+}
 const styles = StyleSheet.create({
-    noteContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
     appContainer: {
         paddingTop: 0,
         height: '100%',
-        backgroundColor: '#B6F0DA'
+        backgroundColor: colors.gray
     },
     header: {
         flexDirection: 'row',
         width: '100%',
         height: 100,
         paddingTop: 18,
-        backgroundColor: "#00B26E",
+        backgroundColor: colors.black,
         alignItems: 'center',
         justifyContent: 'center'
     },
     // I really wanted round button :D
     button: {
-        backgroundColor: '#4392F1',
+        backgroundColor: colors.primary,
         alignItems: 'center',
         justifyContent: 'center',
         width: 40,
@@ -189,7 +209,12 @@ const styles = StyleSheet.create({
     },
     headerTitle: {
         fontWeight: "bold",
-        color: '#B6F0DA',
+        color: colors.white,
         fontSize: 25,
+    },
+    headerButton: {
+        fontWeight: "bold",
+        color: colors.white,
+        fontSize: 35,
     }
 })
